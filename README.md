@@ -1,2 +1,2 @@
 # freyja
-vulkan rendering pipleine
+Data-Oriented Cross Platform Rendering Pipeline
