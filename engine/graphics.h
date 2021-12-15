@@ -54,7 +54,7 @@ namespace Graphics {
                 const VkAllocationCallbacks*);
         
             // returns the current delta time
-            long long DeltaTime(DeltaTimePrecision dtp = DeltaTimePrecision::Microseconds);
+            float DeltaTime(DeltaTimePrecision dtp = DeltaTimePrecision::Microseconds);
         
         protected:
             static const char* WindowTitle;
