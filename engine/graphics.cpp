@@ -182,8 +182,25 @@ void RenderBackend::calcDeltaTime() {
             (chrono::high_resolution_clock::now().time_since_epoch()
         ).count();
 
-    this->DeltaTime = this->deltaCurrentFrameTime - this->deltaPrevFrameTime;
-    this->deltaPrevFrameTime = this->deltaCurrentFrameTime;
+    this->DeltaFrameTimeMicros = this->deltaCurrentFrameTime - this->deltaPrevFrameTime;
+    this->deltaPrevFrameTime   = this->deltaCurrentFrameTime;
+}
+
+float RenderBackend::DeltaTime(DeltaTimePrecision dtp = DeltaTimePrecision::Microseconds) {
+     if (this->DeltaTime == 0) {
+        return 0.0;
+     }
+     
+    switch (dtp) {
+        case DeltaTimePrecision::Microseconds:
+           return (float)this->DeltaFrameTimeMicros;
+
+        case DeltaTimePrecision::Milliseconds:
+           return (float)this->DeltaFrameTimeMicros / 1000;
+
+        case DeltaTimePrecision::Seconds:
+           return (float)this->DeltaFrameTimeMicros / 1000000;
+     }
 }
 
 void RenderBackend::Close() {
