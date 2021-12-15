@@ -21,24 +21,21 @@ namespace Graphics {
     
     const uint32_t DefaultWindowSizeW = 800;
     const uint32_t DefaultWindowSizeH = 800;
-
+    
+    enum struct DeltaTimePrecision {
+            Microseconds, // default
+            Milliseconds,
+            Seconds
+    }
+    
     struct RenderBackend {
-        static const char* WindowTitle;
-        static const char* AppName;
-        static const char* EngName;
-
-        static const uint32_t EngVersion;
-        static const uint32_t AppVersion;
-
-        GLFWwindow* Window;
-        VkInstance Instance;
-        VkDebugUtilsMessengerEXT DebugMessenger;
-
         public:
             // starts up the rendering engine
             void GraphicsInit(uint32_t, uint32_t);
+        
             // steps the rendering engine forward one frame; returns true if window should close
             bool GraphicsStep();
+        
             // safely closes the rendering engine
             void Close();
 
@@ -55,7 +52,24 @@ namespace Graphics {
             // call vulkan to destroy our debug callback
             void DestroyDebugUtilsMessengerEXT(
                 const VkAllocationCallbacks*);
+        
+            // returns the current delta time
+            float DeltaTime(DeltaTimePrecision dtp = DeltaTimePrecision::Microseconds);
+        
+        protected:
+            static const char* WindowTitle;
+            static const char* AppName;
+            static const char* EngName;
 
+            static const uint32_t EngVersion;
+            static const uint32_t AppVersion;
+
+            GLFWwindow* Window;
+            VkInstance Instance;
+            VkDebugUtilsMessengerEXT DebugMessenger;
+        
+            long long DeltaFrameTimeMicros;
+        
         private: 
             void windowStartup(uint32_t w, uint32_t h);
             void vulkanStartup();
