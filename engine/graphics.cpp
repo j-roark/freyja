@@ -77,7 +77,7 @@ void RenderBackend::createInstance() {
     }
 
     // create application information
-    _appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
+    _appInfo.sType              = VK_STRUCTURE_TYPE_APPLICATION_INFO;
     _appInfo.pApplicationName   = RenderBackend::AppName;
     _appInfo.applicationVersion = RenderBackend::AppVersion;
     _appInfo.pEngineName        = RenderBackend::EngName;
@@ -164,11 +164,26 @@ VkResult RenderBackend::InstallDebugMessenger() {
 }
 
 void RenderBackend::populateDebugMessengerCreateInfo(VkDebugUtilsMessengerCreateInfoEXT& _createInfo) {
-    _createInfo.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
-    _createInfo.messageSeverity = VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT;
-    _createInfo.messageType = VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT;
+    _createInfo.sType           = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
+    _createInfo.messageSeverity = VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT
+                                | VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT
+                                | VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT;
+    _createInfo.messageType     = VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT
+                                | VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT
+                                | VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT;
     _createInfo.pfnUserCallback = RenderBackend::DebugCallback;
 
+}
+
+// calcDeltaTime() is called to update the time between frames
+void RenderBackend::calcDeltaTime() {
+    this->deltaCurrentFrameTime = 
+        chrono::duration_cast<chrono::microseconds>
+            (chrono::high_resolution_clock::now().time_since_epoch()
+        ).count();
+
+    this->DeltaTime = this->deltaCurrentFrameTime - this->deltaPrevFrameTime;
+    this->deltaPrevFrameTime = this->deltaCurrentFrameTime;
 }
 
 void RenderBackend::Close() {
