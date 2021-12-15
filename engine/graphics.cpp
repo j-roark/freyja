@@ -37,6 +37,8 @@ void RenderBackend::windowStartup(uint32_t w, uint32_t h) {
 
 bool RenderBackend::GraphicsStep() {
     // TODO: Add frame alpha timing here
+    calcDeltaTime();
+    
     if (!glfwWindowShouldClose(Window)) {
         glfwPollEvents();
         return false;
